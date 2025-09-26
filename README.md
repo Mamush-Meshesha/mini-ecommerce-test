@@ -6,6 +6,7 @@ A full-stack e-commerce application built with modern technologies, featuring a 
 
 - **Frontend**: [https://mini-ecommerce-test-alpha.vercel.app](https://mini-ecommerce-test-alpha.vercel.app)
 - **Backend API**: Available with Swagger documentation at `/api-docs`
+- **Video Demo**: https://share.vidyard.com/watch/iMDsLGcUjiVj9JWJ5yr91M
 
 ## 📋 Project Overview
 
