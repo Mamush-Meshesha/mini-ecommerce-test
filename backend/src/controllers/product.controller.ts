@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { prisma } from "../utils/prisma.utils.js";
 import {
   uploadToCloudinary,
@@ -256,7 +256,7 @@ export const getProduct = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const product = await prisma.product.findUnique({
-      where: { id },
+      where: { id: id! },
       include: {
         category: true,
       },
@@ -369,7 +369,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     // Check if product exists
     const existingProduct = await prisma.product.findUnique({
-      where: { id },
+      where: { id: id! },
     });
 
     if (!existingProduct) {
@@ -414,8 +414,8 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (stock !== undefined) updateData.stock = parseInt(stock);
     if (categoryId !== undefined) updateData.categoryId = categoryId || null;
 
-    const product = await prisma.product.update({
-      where: { id },
+    const updatedProduct = await prisma.product.update({
+      where: { id: id! },
       data: updateData,
       include: {
         category: true,
@@ -429,7 +429,7 @@ export const updateProduct = async (req: Request, res: Response) => {
           userId: req.user.userId,
           action: "UPDATE",
           entity: "Product",
-          entityId: product.id,
+          entityId: updatedProduct.id,
           roleAtTime: req.user.role,
         },
       });
@@ -437,7 +437,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     res.json({
       message: "Product updated successfully",
-      product,
+      product: updatedProduct,
     });
   } catch (error) {
     console.error("Update product error:", error);
@@ -492,7 +492,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     // Check if product exists
     const existingProduct = await prisma.product.findUnique({
-      where: { id },
+      where: { id: id! },
     });
 
     if (!existingProduct) {
@@ -501,7 +501,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     // Check if product is in any cart
     const cartItems = await prisma.cartItem.findMany({
-      where: { productId: id },
+      where: { productId: id! },
     });
 
     if (cartItems.length > 0) {
@@ -512,7 +512,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
 
     await prisma.product.delete({
-      where: { id },
+      where: { id: id! },
     });
 
     // Log audit trail
@@ -522,7 +522,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
           userId: req.user.userId,
           action: "DELETE",
           entity: "Product",
-          entityId: id,
+          entityId: id!,
           roleAtTime: req.user.role,
         },
       });

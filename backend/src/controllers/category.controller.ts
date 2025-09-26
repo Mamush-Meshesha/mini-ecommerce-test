@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from "express";
 import { prisma } from '../utils/prisma.utils.js';
 
 /**
@@ -184,7 +184,7 @@ export const getCategory = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const category = await prisma.category.findUnique({
-      where: { id },
+      where: { id: id! },
       include: {
         products: true,
         _count: {
@@ -272,7 +272,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 
     // Check if category exists
     const existingCategory = await prisma.category.findUnique({
-      where: { id }
+      where: { id: id! }
     });
 
     if (!existingCategory) {
@@ -283,7 +283,7 @@ export const updateCategory = async (req: Request, res: Response) => {
     const duplicateCategory = await prisma.category.findFirst({
       where: {
         name,
-        NOT: { id }
+        NOT: { id: id! }
       }
     });
 
@@ -292,7 +292,7 @@ export const updateCategory = async (req: Request, res: Response) => {
     }
 
     const category = await prisma.category.update({
-      where: { id },
+      where: { id: id! },
       data: { name }
     });
 
@@ -366,7 +366,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
 
     // Check if category exists
     const existingCategory = await prisma.category.findUnique({
-      where: { id },
+      where: { id: id! },
       include: {
         _count: {
           select: { products: true }
@@ -386,7 +386,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
     }
 
     await prisma.category.delete({
-      where: { id }
+      where: { id: id! }
     });
 
     // Log audit trail
@@ -396,7 +396,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
           userId: req.user.userId,
           action: 'DELETE',
           entity: 'Category',
-          entityId: id,
+          entityId: id!,
           roleAtTime: req.user.role
         }
       });

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { prisma } from '../utils/prisma.utils.js';
 
 export const auditLog = (action: string, entity: string) => {

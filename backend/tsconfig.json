@@ -14,7 +14,7 @@
     "sourceMap": true,          // Generate .map files
     "declaration": true,        // Generate .d.ts files
     "declarationMap": true,     // Map for declarations
-
+    
     // Stricter Typechecking Options
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -22,7 +22,7 @@
 
     // Module & Import Handling
     "esModuleInterop": true,
-    "moduleResolution": "node",
+"moduleResolution": "NodeNext",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "noUncheckedSideEffectImports": true,

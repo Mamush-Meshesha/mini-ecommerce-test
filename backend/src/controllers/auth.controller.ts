@@ -1,10 +1,10 @@
-import { AuthenticatedRequest } from "./../middlewares/authMiddleware";
-import { Request, Response } from "express";
+import type { AuthenticatedRequest } from "./../middlewares/authMiddleware.js";
+import type { Request, Response } from 'express';
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/jwt.utils.js";
 import { prisma } from "../utils/prisma.utils.js";
 import { uploadToCloudinary } from "../middlewares/cloudinary.js";
-import fs from "fs";
+import jwt from 'jsonwebtoken';
 import { Role } from "@prisma/client";
 
 export const register = async (req: Request, res: Response) => {
@@ -183,10 +183,7 @@ export const updateProfile = async (
         profileImageUrl = uploadResult.secure_url;
         profileImagePublicId = uploadResult.public_id;
 
-        // Clean up temporary file if it exists
-        if (file.path && fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
-        }
+        // File cleanup handled by multer
       } catch (uploadError) {
         console.error("Profile image upload error:", uploadError);
         return res

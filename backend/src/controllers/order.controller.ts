@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { prisma } from '../utils/prisma.utils';
+import type { Request, Response } from 'express';
+import { prisma } from '../utils/prisma.utils.js';
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
@@ -40,7 +40,7 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 
     // Create order with transaction
-    const order = await prisma.$transaction(async (tx) => {
+    const order = await prisma.$transaction(async (tx: any) => {
       // Create order
       const newOrder = await tx.order.create({
         data: {
@@ -49,7 +49,7 @@ export const createOrder = async (req: Request, res: Response) => {
           status: 'PENDING',
           shippingAddress,
           orderItems: {
-            create: cartItems.map(item => ({
+            create: cartItems.map((item: any) => ({
               productId: item.productId,
               quantity: item.quantity,
               price: item.product.price
@@ -138,9 +138,9 @@ export const getOrder = async (req: Request, res: Response) => {
     }
 
     const order = await prisma.order.findFirst({
-      where: { 
-        id,
-        userId 
+      where: {
+        id: id!,
+        userId
       },
       include: {
         orderItems: {
@@ -232,7 +232,7 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
     }
 
     const order = await prisma.order.update({
-      where: { id },
+      where: { id: id! },
       data: { status },
       include: {
         user: {

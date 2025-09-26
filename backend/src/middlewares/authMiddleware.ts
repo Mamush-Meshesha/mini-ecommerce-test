@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { verifyToken, JwtPayload } from "../utils/jwt.utils.js";
+import type { Request, Response, NextFunction } from "express";
+import { verifyToken, type JwtPayload } from "../utils/jwt.utils.js";
 import { Role } from "@prisma/client";
 
 declare global {

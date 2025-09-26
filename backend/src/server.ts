@@ -8,7 +8,7 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import routes from "./routes/index.js";
 import swaggerUi from "swagger-ui-express";
-import { swaggerSpec } from "./config/swagger.config.js";
+import { specs } from "./config/swagger.config.js";
 
 dotenv.config();
 
@@ -43,7 +43,7 @@ app.use(morgan("combined"));
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Health check endpoint
 app.get("/", (req, res) => {

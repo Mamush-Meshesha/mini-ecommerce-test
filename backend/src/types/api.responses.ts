@@ -1,13 +1,10 @@
-import { 
+import type { 
   User, 
   Product, 
   Category, 
-  Order, 
-  Payment, 
-  ApiError, 
-  SuccessMessage, 
-  PaginatedResponse 
-} from './api.types.js';
+  Order,
+  PaymentRequest
+} from '@prisma/client';
 
 // Authentication Responses
 export interface LoginResponse {
@@ -94,12 +91,12 @@ export interface OrderCreatedResponse {
 // Payment Responses
 export interface PaymentResponse {
   message: string;
-  payment: Payment;
+  payments: PaymentRequest[];
 }
 
 export interface PaymentProcessedResponse {
   message: string;
-  payment: Payment;
+  payments: PaymentRequest[];
   transactionId: string;
 }
 

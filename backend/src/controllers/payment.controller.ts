@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from "express";
 import { prisma } from '../utils/prisma.utils.js';
 import { PaymentStatus, Role } from '@prisma/client';
 
@@ -272,7 +272,7 @@ export const getPaymentRequest = async (req: Request, res: Response) => {
     }
 
     const paymentRequest = await prisma.paymentRequest.findUnique({
-      where: { id },
+      where: { id: id! },
       include: {
         user: {
           select: {
@@ -366,7 +366,7 @@ export const approvePaymentRequest = async (req: Request, res: Response) => {
     }
 
     const paymentRequest = await prisma.paymentRequest.findUnique({
-      where: { id }
+      where: { id: id! }
     });
 
     if (!paymentRequest) {
@@ -378,7 +378,7 @@ export const approvePaymentRequest = async (req: Request, res: Response) => {
     }
 
     const updatedPaymentRequest = await prisma.paymentRequest.update({
-      where: { id },
+      where: { id: id! },
       data: {
         status: PaymentStatus.APPROVED_BY_ADMIN,
         approvedByAdminId: userId
@@ -407,7 +407,7 @@ export const approvePaymentRequest = async (req: Request, res: Response) => {
         userId,
         action: 'APPROVE',
         entity: 'PaymentRequest',
-        entityId: id,
+        entityId: id!,
         roleAtTime: userRole
       }
     });
@@ -474,7 +474,7 @@ export const rejectPaymentRequest = async (req: Request, res: Response) => {
     }
 
     const paymentRequest = await prisma.paymentRequest.findUnique({
-      where: { id }
+      where: { id: id! }
     });
 
     if (!paymentRequest) {
@@ -486,7 +486,7 @@ export const rejectPaymentRequest = async (req: Request, res: Response) => {
     }
 
     const updatedPaymentRequest = await prisma.paymentRequest.update({
-      where: { id },
+      where: { id: id! },
       data: {
         status: PaymentStatus.REJECTED_BY_ADMIN,
         approvedByAdminId: userId
@@ -515,7 +515,7 @@ export const rejectPaymentRequest = async (req: Request, res: Response) => {
         userId,
         action: 'REJECT',
         entity: 'PaymentRequest',
-        entityId: id,
+        entityId: id!,
         roleAtTime: userRole
       }
     });
@@ -582,7 +582,7 @@ export const confirmPaymentRequest = async (req: Request, res: Response) => {
     }
 
     const paymentRequest = await prisma.paymentRequest.findUnique({
-      where: { id }
+      where: { id: id! }
     });
 
     if (!paymentRequest) {
@@ -594,7 +594,7 @@ export const confirmPaymentRequest = async (req: Request, res: Response) => {
     }
 
     const updatedPaymentRequest = await prisma.paymentRequest.update({
-      where: { id },
+      where: { id: id! },
       data: {
         status: PaymentStatus.CONFIRMED_BY_SUPER_ADMIN,
         confirmedBySuperAdminId: userId
@@ -630,7 +630,7 @@ export const confirmPaymentRequest = async (req: Request, res: Response) => {
         userId,
         action: 'CONFIRM',
         entity: 'PaymentRequest',
-        entityId: id,
+        entityId: id!,
         roleAtTime: userRole
       }
     });

@@ -1,8 +1,8 @@
-import swaggerJSDoc from "swagger-jsdoc";
+import swaggerJsdoc from 'swagger-jsdoc';
 import { swaggerSchemas } from "../docs/swagger.schemas.js";
 import { swaggerResponses } from "../docs/swagger.responses.js";
 
-const options: swaggerJSDoc.Options = {
+const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.3",
     info: {
@@ -76,4 +76,4 @@ const options: swaggerJSDoc.Options = {
   apis: ["./src/controllers/*.ts", "./src/routes/*.ts"],
 };
 
-export const swaggerSpec = swaggerJSDoc(options);
+export const specs = swaggerJsdoc(options);

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { prisma } from '../utils/prisma.utils.js';
 
 export const addToCart = async (req: Request, res: Response) => {
@@ -138,7 +138,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
     // Check if cart item exists and belongs to user
     const cartItem = await prisma.cartItem.findFirst({
       where: {
-        id,
+        id: id!,
         userId
       },
       include: { product: true }
@@ -154,7 +154,7 @@ export const updateCartItem = async (req: Request, res: Response) => {
     }
 
     const updatedCartItem = await prisma.cartItem.update({
-      where: { id },
+      where: { id: id! },
       data: { quantity },
       include: {
         product: {
@@ -185,7 +185,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
     // Check if cart item exists and belongs to user
     const cartItem = await prisma.cartItem.findFirst({
       where: {
-        id,
+        id: id!,
         userId
       }
     });
@@ -195,7 +195,7 @@ export const removeFromCart = async (req: Request, res: Response) => {
     }
 
     await prisma.cartItem.delete({
-      where: { id }
+      where: { id: id! }
     });
 
     res.json({ message: 'Item removed from cart successfully' });

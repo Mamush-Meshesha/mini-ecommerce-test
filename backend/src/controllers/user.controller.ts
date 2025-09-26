@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { prisma } from '../utils/prisma.utils';
+import type { Request, Response } from 'express';
+import { prisma } from '../utils/prisma.utils.js';
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -67,7 +67,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
     }
 
     const user = await prisma.user.update({
-      where: { id },
+      where: { id: id! },
       data: { role },
       select: {
         id: true,
@@ -108,7 +108,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     // Check if user exists
     const existingUser = await prisma.user.findUnique({
-      where: { id }
+      where: { id: id! }
     });
 
     if (!existingUser) {
@@ -122,7 +122,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     // Delete user (this will cascade delete related cart items and orders due to foreign key constraints)
     await prisma.user.delete({
-      where: { id }
+      where: { id: id! }
     });
 
     // Log audit trail
@@ -132,7 +132,7 @@ export const deleteUser = async (req: Request, res: Response) => {
           userId: req.user.userId,
           action: 'DELETE',
           entity: 'User',
-          entityId: id,
+          entityId: id!,
           roleAtTime: req.user.role,
         }
       });
