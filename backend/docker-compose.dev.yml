@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Development
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: mini-ecommerce-db-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mini_ecommerce_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./prisma/migrations:/docker-entrypoint-initdb.d/migrations
+    networks:
+      - mini-ecommerce-dev-network
+
+  # Redis for Development
+  redis-dev:
+    image: redis:7-alpine
+    container_name: mini-ecommerce-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+    networks:
+      - mini-ecommerce-dev-network
+
+  # Development Backend (optional - for containerized development)
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: mini-ecommerce-backend-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres-dev:5432/mini_ecommerce_dev
+      JWT_SECRET: development-jwt-secret-not-for-production
+      JWT_EXPIRES_IN: 7d
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres-dev
+      - redis-dev
+    networks:
+      - mini-ecommerce-dev-network
+    command: npm run dev
+
+volumes:
+  postgres_dev_data:
+
+networks:
+  mini-ecommerce-dev-network:
+    driver: bridge

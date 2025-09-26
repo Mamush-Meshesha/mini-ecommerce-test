@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: mini-ecommerce-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mini_ecommerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mini-ecommerce-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mini-ecommerce-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/mini_ecommerce
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      JWT_EXPIRES_IN: 7d
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+    depends_on:
+      - postgres
+    networks:
+      - mini-ecommerce-network
+    # Run database migrations on startup
+    command: sh -c "npx prisma migrate deploy && npm start"
+
+  # Redis (Optional - for caching and sessions)
+  redis:
+    image: redis:7-alpine
+    container_name: mini-ecommerce-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - mini-ecommerce-network
+
+volumes:
+  postgres_data:
+
+networks:
+  mini-ecommerce-network:
+    driver: bridge

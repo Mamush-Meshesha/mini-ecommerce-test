@@ -5,11 +5,14 @@ A comprehensive e-commerce backend built with Node.js, Express, TypeScript, and 
 ## Features
 
 - **User Management**: Registration, login, profile management with role-based access (USER, ADMIN, SUPER_ADMIN)
-- **Product Management**: Full CRUD operations for products with category support
+- **Product Management**: Full CRUD operations for products with category support and image upload
 - **Category Management**: Product categorization system
 - **Shopping Cart**: Add, update, remove items with stock validation
-- **Payment Requests**: Multi-level approval workflow (Admin → Super Admin)
+- **Order Management**: Complete order processing with status tracking
+- **Payment Processing**: Integrated payment system with order confirmation
+- **File Upload**: Cloudinary integration for product images and user avatars
 - **Audit Logging**: Track all user actions for compliance
+- **API Documentation**: Swagger/OpenAPI documentation available at `/api-docs`
 - **Security**: JWT authentication, rate limiting, CORS, helmet protection
 
 ## Database Schema
@@ -51,13 +54,15 @@ The application uses the following main entities:
 - `DELETE /item/:id` - Remove item from cart
 - `DELETE /clear` - Clear entire cart
 
-### Payment Requests (`/api/payments`)
-- `GET /` - Get payment requests (filtered by user role)
-- `GET /:id` - Get single payment request
-- `POST /` - Create payment request
-- `PUT /:id/approve` - Approve payment request (admin)
-- `PUT /:id/reject` - Reject payment request (admin)
-- `PUT /:id/confirm` - Confirm payment request (super admin)
+### Orders (`/api/orders`)
+- `GET /` - Get user's orders
+- `GET /:id` - Get single order
+- `POST /` - Create order from cart
+- `PUT /:id/status` - Update order status (admin only)
+
+### Payments (`/api/payments`)
+- `POST /process` - Process payment for order
+- `GET /` - Get payment history (admin only)
 
 ### Audit Logs (`/api/audit`)
 - `GET /` - Get audit logs (admin only)
@@ -100,10 +105,28 @@ The application uses the following main entities:
 
 ## Environment Variables
 
-- `DATABASE_URL`: PostgreSQL connection string
-- `JWT_SECRET`: Secret key for JWT token signing
-- `PORT`: Server port (default: 3000)
-- `NODE_ENV`: Environment (development/production)
+Required environment variables (copy from `.env.example`):
+
+```bash
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/mini_ecommerce"
+
+# Authentication
+JWT_SECRET="your-super-secret-jwt-key-here"
+JWT_EXPIRES_IN="7d"
+
+# Server
+PORT=3000
+NODE_ENV="development"
+
+# Cloudinary (for file uploads)
+CLOUDINARY_CLOUD_NAME="your-cloudinary-cloud-name"
+CLOUDINARY_API_KEY="your-cloudinary-api-key"
+CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
+
+# CORS Origins (add your frontend URLs)
+FRONTEND_URL="http://localhost:5173"
+```
 
 ## User Roles
 
@@ -131,18 +154,142 @@ The project uses:
 - **jsonwebtoken** for authentication
 - **helmet** and **cors** for security
 
+## API Documentation
+
+Interactive API documentation is available at `/api-docs` when the server is running. This Swagger UI provides:
+- Complete endpoint documentation
+- Request/response schemas
+- Authentication requirements
+- Try-it-out functionality
+
 ## API Testing
 
-You can test the API using tools like Postman or curl. Make sure to:
-1. Register a user or create admin users
-2. Login to get JWT token
+You can test the API using:
+1. **Swagger UI**: Visit `http://localhost:3000/api-docs` for interactive testing
+2. **Postman/Insomnia**: Import the OpenAPI spec from `/api-docs`
+3. **curl**: Command-line testing
+
+**Authentication Flow:**
+1. Register a user: `POST /api/auth/register`
+2. Login to get JWT token: `POST /api/auth/login`
 3. Include `Authorization: Bearer <token>` header for protected routes
+
+## Available Scripts
+
+```bash
+# Development
+npm run dev          # Start development server with hot reload
+npm run build        # Build TypeScript to JavaScript
+npm start           # Start production server
+
+# Database
+npm run prisma:gen     # Generate Prisma client
+npm run prisma:migrate # Run database migrations
+npm run prisma:studio  # Open Prisma Studio
+npm run prisma:reset   # Reset database (development only)
+
+# Code Quality
+npm run lint          # Run ESLint
+npm run type-check    # Run TypeScript compiler check
+
+# Docker
+docker build -t mini-ecommerce-backend .                    # Build production image
+docker run -p 3000:3000 mini-ecommerce-backend             # Run container
+docker-compose up -d                                        # Start with PostgreSQL
+docker-compose -f docker-compose.dev.yml up -d             # Development environment
+```
 
 ## Production Deployment
 
-1. Set `NODE_ENV=production`
-2. Use a secure `JWT_SECRET`
-3. Configure proper database connection
-4. Set up reverse proxy (nginx)
-5. Enable HTTPS
-6. Configure proper logging and monitoring
+### Prerequisites
+- Node.js 18+ 
+- PostgreSQL database
+- Cloudinary account (for file uploads)
+
+### Deployment Steps
+1. **Environment Setup**
+   ```bash
+   NODE_ENV=production
+   DATABASE_URL="your-production-database-url"
+   JWT_SECRET="secure-random-string"
+   ```
+
+2. **Database Migration**
+   ```bash
+   npm run prisma:migrate
+   npm run prisma:gen
+   ```
+
+3. **Build and Start**
+   ```bash
+   npm run build
+   npm start
+   ```
+
+### Docker Deployment
+
+#### Production with Docker
+```bash
+# Build the production image
+docker build -t mini-ecommerce-backend .
+
+# Run with environment variables
+docker run -d \
+  --name mini-ecommerce-backend \
+  -p 3000:3000 \
+  -e DATABASE_URL="your-production-database-url" \
+  -e JWT_SECRET="your-secure-jwt-secret" \
+  -e CLOUDINARY_CLOUD_NAME="your-cloudinary-name" \
+  -e CLOUDINARY_API_KEY="your-api-key" \
+  -e CLOUDINARY_API_SECRET="your-api-secret" \
+  mini-ecommerce-backend
+```
+
+#### Docker Compose (Recommended)
+```bash
+# Production environment
+docker-compose up -d
+
+# Development environment with hot reload
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+#### Environment Variables for Docker
+Create a `.env` file for docker-compose:
+```bash
+CLOUDINARY_CLOUD_NAME=your-cloudinary-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+```
+
+### Recommended Production Setup
+- Use Docker with orchestration (Docker Swarm/Kubernetes)
+- Set up reverse proxy (nginx/Apache) 
+- Enable HTTPS with SSL certificates
+- Configure proper logging and monitoring
+- Set up database backups
+- Use environment-specific configurations
+- Implement health checks and auto-restart policies
+
+## Troubleshooting
+
+**Common Issues:**
+
+1. **Database Connection Error**
+   - Verify `DATABASE_URL` is correct
+   - Ensure PostgreSQL is running
+   - Check network connectivity
+
+2. **JWT Token Issues**
+   - Verify `JWT_SECRET` is set
+   - Check token expiration settings
+   - Ensure proper Authorization header format
+
+3. **File Upload Errors**
+   - Verify Cloudinary credentials
+   - Check file size limits
+   - Ensure proper CORS configuration
+
+4. **CORS Issues**
+   - Add frontend URL to CORS origins
+   - Check credentials and headers configuration
