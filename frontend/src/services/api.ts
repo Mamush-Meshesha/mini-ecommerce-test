@@ -188,4 +188,102 @@ export const usersAPI = {
   }
 };
 
+// Dashboard API
+export const dashboardAPI = {
+  getStatistics: async () => {
+    try {
+      // Try to get data from multiple endpoints with error handling
+      const responses = await Promise.allSettled([
+        api.get('/products?limit=1000'),
+        api.get('/orders/admin/all?limit=1000'),
+        api.get('/users/admin/all?limit=1000')
+      ]);
+
+      // Extract data with fallbacks
+      const productsData = responses[0].status === 'fulfilled' ? responses[0].value.data : {};
+      const ordersData = responses[1].status === 'fulfilled' ? responses[1].value.data : {};
+      const usersData = responses[2].status === 'fulfilled' ? responses[2].value.data : {};
+
+      // Handle different possible response structures
+      const products = productsData.products || productsData.data || [];
+      const orders = ordersData.orders || ordersData.data || [];
+      const users = usersData.users || usersData.data || [];
+
+      console.log('Dashboard API Debug:', { products, orders, users });
+
+      // Calculate statistics
+      const totalProducts = Array.isArray(products) ? products.length : 0;
+      const totalOrders = Array.isArray(orders) ? orders.length : 0;
+      const totalUsers = Array.isArray(users) ? users.length : 0;
+      
+      // Calculate total revenue from orders
+      const totalRevenue = Array.isArray(orders) ? orders.reduce((sum: number, order) => {
+        const orderTotal = parseFloat(order.total || order.amount || 0);
+        return sum + orderTotal;
+      }, 0) : 0;
+
+      // Count orders by status
+      const pendingOrders = Array.isArray(orders) ? 
+        orders.filter((order) => order.status === 'PENDING').length : 0;
+      
+      // Count low stock products (less than 10 items)
+      const lowStockProducts = Array.isArray(products) ? 
+        products.filter((product) => (product.stock || 0) < 10).length : 0;
+
+      // Get recent orders (last 5)
+      const recentOrders = Array.isArray(orders) ? orders
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 5)
+        .map((order) => ({
+          id: order.id,
+          customer: order.user?.name || 'Unknown',
+          amount: parseFloat(order.total || order.amount || 0),
+          status: (order.status || 'pending').toLowerCase(),
+          createdAt: order.createdAt
+        })) : [];
+
+      // Calculate revenue growth (mock calculation - would need historical data)
+      const revenueGrowth = 12.5;
+
+      // Count new users today
+      const today = new Date();
+      const newUsersToday = Array.isArray(users) ? users.filter((user) => {
+        if (!user.createdAt) return false;
+        const userDate = new Date(user.createdAt);
+        return userDate.toDateString() === today.toDateString();
+      }).length : 0;
+
+      const result = {
+        totalProducts,
+        totalOrders,
+        totalUsers,
+        totalRevenue,
+        pendingOrders,
+        lowStockProducts,
+        newUsersToday,
+        revenueGrowth,
+        recentOrders
+      };
+
+      console.log('Dashboard Statistics:', result);
+      return result;
+
+    } catch (error) {
+      console.error('Dashboard API Error:', error);
+      // Return fallback data
+      return {
+        totalProducts: 0,
+        totalOrders: 0,
+        totalUsers: 0,
+        totalRevenue: 0,
+        pendingOrders: 0,
+        lowStockProducts: 0,
+        newUsersToday: 0,
+        revenueGrowth: 0,
+        recentOrders: []
+      };
+    }
+  }
+};
+
 export default api;

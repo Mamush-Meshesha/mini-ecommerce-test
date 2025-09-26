@@ -4,6 +4,7 @@ import authReducer from './slices/authSlice';
 import productsReducer from './slices/productsSlice';
 import cartReducer from './slices/cartSlice';
 import ordersReducer from './slices/ordersSlice';
+import dashboardReducer from './slices/dashboardSlice';
 import rootSaga from './sagas';
 
 // Create the saga middleware
@@ -15,6 +16,7 @@ export const store = configureStore({
     products: productsReducer,
     cart: cartReducer,
     orders: ordersReducer,
+    dashboard: dashboardReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

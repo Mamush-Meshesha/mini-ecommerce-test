@@ -7,13 +7,13 @@ import { Button, Card } from '../components/ui';
 import { useAuth } from '../hooks/useAuth';
 import { fetchProductsRequest, fetchCategoriesRequest } from '../store/slices/productsSlice';
 import { addToCartRequest } from '../store/slices/cartSlice';
-import type { Product } from '../types';
+import type { Product, Category } from '../types';
 
 export const HomePage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, isAdmin, isSuperAdmin } = useAuth();
-  const { products, isLoading, categories } = useSelector((state: RootState) => state.products as any);
+  const { products, categories, isLoading } = useSelector((state: RootState) => state.products);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 4;
@@ -176,7 +176,7 @@ export const HomePage: React.FC = () => {
               className="flex transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              {featuredProducts.map((product) => (
+              {featuredProducts.map((product: Product) => (
                 <div key={product.id} className="w-full flex-shrink-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                     <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden">
@@ -244,7 +244,7 @@ export const HomePage: React.FC = () => {
               <ChevronLeft className="w-5 h-5 text-gray-600" />
             </button>
             <div className="flex space-x-2">
-              {featuredProducts.map((_, index) => (
+              {featuredProducts.map((_: Product, index: number) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
@@ -270,7 +270,7 @@ export const HomePage: React.FC = () => {
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {categories.length > 0 ? categories.map((category, index) => {
+          {categories.length > 0 ? categories.map((category: Category, index: number) => {
             const icons = ['📱', '👕', '🏠', '⚽', '📚', '💄'];
             const colors = [
               'bg-blue-100 text-blue-600',

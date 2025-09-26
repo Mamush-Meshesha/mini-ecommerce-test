@@ -21,7 +21,7 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {
     // Create Order actions
-    createOrderRequest: (state) => {
+    createOrderRequest: (state, _action: PayloadAction<{ items: { productId: string; quantity: number; price: number }[]; shippingAddress: { street: string; city: string; state: string; zipCode: string; country: string } }>) => {
       state.isLoading = true;
       state.error = null;
     },

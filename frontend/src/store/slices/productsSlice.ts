@@ -41,7 +41,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     // Fetch Products actions
-    fetchProductsRequest: (state, ) => {
+    fetchProductsRequest: (state, _action: PayloadAction<{ page?: number; limit?: number; categoryId?: string; search?: string }>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -56,7 +56,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Fetch Product by ID actions
-    fetchProductByIdRequest: (state, ) => {
+    fetchProductByIdRequest: (state, _action: PayloadAction<string>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -70,7 +70,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Create Product actions
-    createProductRequest: (state, ) => {
+    createProductRequest: (state, _action: PayloadAction<FormData>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -104,7 +104,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Delete Product actions
-    deleteProductRequest: (state, ) => {
+    deleteProductRequest: (state, _action: PayloadAction<string>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -135,7 +135,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Create Category actions
-    createCategoryRequest: (state,) => {
+    createCategoryRequest: (state, _action: PayloadAction<{ name: string; description: string }>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -149,7 +149,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Update Category actions
-    updateCategoryRequest: (state) => {
+    updateCategoryRequest: (state, _action: PayloadAction<{ id: string; data: { name: string; description: string } }>) => {
       state.isLoading = true;
       state.error = null;
     },
@@ -166,7 +166,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Delete Category actions
-    deleteCategoryRequest: (state) => {
+    deleteCategoryRequest: (state, ) => {
       state.isLoading = true;
       state.error = null;
     },

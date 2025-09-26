@@ -12,7 +12,7 @@ export const Orders: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { orders, isLoading } = useSelector((state: RootState) => state.orders as any);
+  const { orders, isLoading } = useSelector((state: RootState) => state.orders);
 
   useEffect(() => {
     if (user) {
@@ -106,9 +106,9 @@ export const Orders: React.FC = () => {
                   {(order.total * 1.1).toFixed(2)}
                 </div>
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-2 ${
-                  order.status === 'confirmed' 
+                  order.status === 'CONFIRMED'
                     ? 'bg-green-100 text-green-800'
-                    : order.status === 'pending'
+                    : order.status === 'PENDING'
                     ? 'bg-yellow-100 text-yellow-800'
                     : 'bg-gray-100 text-gray-800'
                 }`}>
@@ -120,7 +120,7 @@ export const Orders: React.FC = () => {
             <div className="border-t border-gray-200 pt-4">
               <h4 className="font-medium text-gray-900 mb-3">Order Items:</h4>
               <div className="space-y-2">
-                {order.items?.map((item: any, index: number) => (
+                {(order.items || order.orderItems)?.map((item, index: number) => (
                   <div key={index} className="flex justify-between text-sm">
                     <span className="text-gray-600">
                       {item.product?.name || `Product ${item.productId}`} × {item.quantity}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Search, Tag } from 'lucide-react';
 import type { RootState } from '../../store';
 import { Button, Card, Input } from '../../components/ui';
@@ -10,8 +9,7 @@ import type { Category } from '../../types';
 
 export const AdminCategories: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { categories, isLoading } = useSelector((state: RootState) => state.products as any);
+  const { categories, isLoading } = useSelector((state: RootState) => state.products);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
@@ -38,9 +36,9 @@ export const AdminCategories: React.FC = () => {
       dispatch(updateCategoryRequest({ 
         id: editingCategory.id, 
         data: formData 
-      } as any));
+      }));
     } else {
-      dispatch(createCategoryRequest(formData as any));
+      dispatch(createCategoryRequest(formData));
     }
     
     // Reset form

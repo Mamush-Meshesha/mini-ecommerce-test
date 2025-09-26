@@ -16,7 +16,7 @@ export const ProductDetail: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useAuth();
-  const { currentProduct, isLoading, products } = useSelector((state: RootState) => state.products as any);
+  const { currentProduct, isLoading, products } = useSelector((state: RootState) => state.products);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -25,7 +25,7 @@ export const ProductDetail: React.FC = () => {
       dispatch(fetchProductByIdRequest(id));
     }
     // Also fetch related products
-    dispatch(fetchProductsRequest());
+    dispatch(fetchProductsRequest({ page: 1, limit: 10 }));
     
     return () => {
       dispatch(clearCurrentProduct());

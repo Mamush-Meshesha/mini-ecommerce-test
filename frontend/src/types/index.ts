@@ -24,6 +24,7 @@ export interface Product {
 export interface Category {
   id: string;
   name: string;
+  description?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -62,6 +63,7 @@ export interface Order {
     country: string;
   };
   items: OrderItem[];
+  orderItems?: OrderItem[];
   user?: User;
   createdAt: string;
   updatedAt: string;
@@ -100,7 +102,7 @@ export interface AuthState {
   error: string | null;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   message: string;
   data?: T;
   user?: User;

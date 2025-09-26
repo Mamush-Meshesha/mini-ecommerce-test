@@ -13,8 +13,8 @@ export const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { items, isLoading } = useSelector((state: RootState) => state.cart as any);
-  const { isLoading: isOrderLoading } = useSelector((state: RootState) => state.orders as any);
+  const { items } = useSelector((state: RootState) => state.cart);
+  const { isLoading: isOrderLoading } = useSelector((state: RootState) => state.orders);
   const total = items?.reduce((sum: number, item: CartItem) => sum + (item.product.price * item.quantity), 0) || 0;
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
@@ -44,7 +44,7 @@ export const Cart: React.FC = () => {
     try {
       // Create order using backend API
       const orderData = {
-        items: items.map(item => ({
+        items: items.map((item: CartItem) => ({
           productId: item.product.id,
           quantity: item.quantity,
           price: item.product.price
@@ -58,7 +58,7 @@ export const Cart: React.FC = () => {
         }
       };
 
-      dispatch(createOrderRequest(orderData as any));
+      dispatch(createOrderRequest(orderData));
       
       // Clear cart after successful order
       dispatch(clearCartRequest());
@@ -130,7 +130,7 @@ export const Cart: React.FC = () => {
           <h1 className="text-2xl font-bold text-gray-900 mb-6">Shopping Cart</h1>
           
           <div className="space-y-4">
-            {items?.map((item: CartItem) => (
+            {items.map((item: CartItem) => (
               <Card key={item.product.id} className="p-6">
                 <div className="flex items-center space-x-4">
                   {/* Product Image */}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Shield, Search, Calendar, User, Activity } from 'lucide-react';
-import { Button, Card, Input } from '../../components/ui';
+import { Card, Input } from '../../components/ui';
 
 // Mock audit log data - in real app this would come from backend
 const mockAuditLogs = [

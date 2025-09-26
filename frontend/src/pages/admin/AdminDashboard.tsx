@@ -12,34 +12,29 @@ import {
 } from 'lucide-react';
 import type { RootState } from '../../store';
 import { Card } from '../../components/ui';
-import { fetchProductsRequest } from '../../store/slices/productsSlice';
+import { fetchDashboardStatisticsRequest } from '../../store/slices/dashboardSlice';
 
 export const AdminDashboard: React.FC = () => {
   const dispatch = useDispatch();
-  const { products } = useSelector((state: RootState) => state.products as any);
+  const { statistics, isLoading } = useSelector((state: RootState) => state.dashboard);
 
   useEffect(() => {
-    dispatch(fetchProductsRequest({}));
+    dispatch(fetchDashboardStatisticsRequest());
   }, [dispatch]);
 
-  // Mock data for dashboard stats - in real app this would come from backend
-  const dashboardStats = {
-    totalProducts: products?.length || 0,
-    totalOrders: 156,
-    totalUsers: 89,
-    totalRevenue: 12450.75,
-    pendingOrders: 23,
-    lowStockProducts: 8,
-    newUsersToday: 5,
-    revenueGrowth: 12.5
+  // Use real data from backend or fallback to defaults
+  const dashboardStats = statistics || {
+    totalProducts: 0,
+    totalOrders: 0,
+    totalUsers: 0,
+    totalRevenue: 0,
+    pendingOrders: 0,
+    lowStockProducts: 0,
+    newUsersToday: 0,
+    revenueGrowth: 0
   };
 
-  const recentOrders = [
-    { id: 'ORD-001', customer: 'John Doe', amount: 299.99, status: 'pending' },
-    { id: 'ORD-002', customer: 'Jane Smith', amount: 149.50, status: 'completed' },
-    { id: 'ORD-003', customer: 'Bob Johnson', amount: 89.99, status: 'shipped' },
-    { id: 'ORD-004', customer: 'Alice Brown', amount: 199.99, status: 'pending' },
-  ];
+  const recentOrders = statistics?.recentOrders || [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -53,6 +48,14 @@ export const AdminDashboard: React.FC = () => {
         return 'text-gray-600 bg-gray-100';
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
