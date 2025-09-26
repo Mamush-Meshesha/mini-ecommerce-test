@@ -1,0 +1,377 @@
+// Swagger Response Definitions in TypeScript
+export const swaggerResponses = {
+  // Common Error Responses
+  BadRequest: {
+    description: 'Bad Request - Invalid input data',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Error',
+        },
+        example: {
+          message: 'Invalid input data',
+          code: 'BAD_REQUEST',
+          timestamp: '2024-01-15T10:30:00Z',
+        },
+      },
+    },
+  },
+
+  Unauthorized: {
+    description: 'Unauthorized - Authentication required',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Error',
+        },
+        example: {
+          message: 'Access token required',
+          code: 'UNAUTHORIZED',
+          timestamp: '2024-01-15T10:30:00Z',
+        },
+      },
+    },
+  },
+
+  Forbidden: {
+    description: 'Forbidden - Insufficient permissions',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Error',
+        },
+        example: {
+          message: 'Insufficient permissions',
+          code: 'FORBIDDEN',
+          timestamp: '2024-01-15T10:30:00Z',
+        },
+      },
+    },
+  },
+
+  NotFound: {
+    description: 'Not Found - Resource not found',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Error',
+        },
+        example: {
+          message: 'Resource not found',
+          code: 'NOT_FOUND',
+          timestamp: '2024-01-15T10:30:00Z',
+        },
+      },
+    },
+  },
+
+  Conflict: {
+    description: 'Conflict - Resource already exists',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Error',
+        },
+        example: {
+          message: 'Resource with this identifier already exists',
+          code: 'CONFLICT',
+          timestamp: '2024-01-15T10:30:00Z',
+        },
+      },
+    },
+  },
+
+  InternalServerError: {
+    description: 'Internal Server Error',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/Error',
+        },
+        example: {
+          message: 'Internal server error',
+          code: 'INTERNAL_ERROR',
+          timestamp: '2024-01-15T10:30:00Z',
+        },
+      },
+    },
+  },
+
+  // Authentication Responses
+  LoginSuccess: {
+    description: 'Login successful',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            token: {
+              type: 'string',
+            },
+            refreshToken: {
+              type: 'string',
+            },
+            user: {
+              $ref: '#/components/schemas/User',
+            },
+          },
+          required: ['message', 'token', 'user'],
+        },
+        example: {
+          message: 'Login successful',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+          refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+          user: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            email: 'user@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            role: 'USER',
+            isActive: true,
+            createdAt: '2024-01-15T10:30:00Z',
+            updatedAt: '2024-01-15T10:30:00Z',
+          },
+        },
+      },
+    },
+  },
+
+  // User Responses
+  UserCreated: {
+    description: 'User created successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            user: {
+              $ref: '#/components/schemas/User',
+            },
+          },
+          required: ['message', 'user'],
+        },
+        example: {
+          message: 'User created successfully',
+          user: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            email: 'user@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            role: 'USER',
+            isActive: true,
+            createdAt: '2024-01-15T10:30:00Z',
+            updatedAt: '2024-01-15T10:30:00Z',
+          },
+        },
+      },
+    },
+  },
+
+  UsersList: {
+    description: 'Users list retrieved successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            users: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/User',
+              },
+            },
+            meta: {
+              $ref: '#/components/schemas/PaginationMeta',
+            },
+          },
+          required: ['message', 'users'],
+        },
+      },
+    },
+  },
+
+  // Product Responses
+  ProductCreated: {
+    description: 'Product created successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            product: {
+              $ref: '#/components/schemas/Product',
+            },
+          },
+          required: ['message', 'product'],
+        },
+      },
+    },
+  },
+
+  ProductsList: {
+    description: 'Products list retrieved successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            products: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Product',
+              },
+            },
+            meta: {
+              $ref: '#/components/schemas/PaginationMeta',
+            },
+          },
+          required: ['message', 'products'],
+        },
+      },
+    },
+  },
+
+  // Category Responses
+  CategoryCreated: {
+    description: 'Category created successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            category: {
+              $ref: '#/components/schemas/Category',
+            },
+          },
+          required: ['message', 'category'],
+        },
+        example: {
+          message: 'Category created successfully',
+          category: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'Electronics',
+            description: 'Electronic devices and accessories',
+            isActive: true,
+            createdAt: '2024-01-15T10:30:00Z',
+            updatedAt: '2024-01-15T10:30:00Z',
+          },
+        },
+      },
+    },
+  },
+
+  CategoriesList: {
+    description: 'Categories list retrieved successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            categories: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Category',
+              },
+            },
+            meta: {
+              $ref: '#/components/schemas/PaginationMeta',
+            },
+          },
+          required: ['message', 'categories'],
+        },
+      },
+    },
+  },
+
+  // Order Responses
+  OrderCreated: {
+    description: 'Order created successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            order: {
+              $ref: '#/components/schemas/Order',
+            },
+          },
+          required: ['message', 'order'],
+        },
+      },
+    },
+  },
+
+  OrdersList: {
+    description: 'Orders list retrieved successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            orders: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Order',
+              },
+            },
+            meta: {
+              $ref: '#/components/schemas/PaginationMeta',
+            },
+          },
+          required: ['message', 'orders'],
+        },
+      },
+    },
+  },
+
+  // Payment Responses
+  PaymentProcessed: {
+    description: 'Payment processed successfully',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            message: {
+              type: 'string',
+            },
+            payment: {
+              $ref: '#/components/schemas/Payment',
+            },
+            transactionId: {
+              type: 'string',
+            },
+          },
+          required: ['message', 'payment', 'transactionId'],
+        },
+      },
+    },
+  },
+};
