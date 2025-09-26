@@ -8,6 +8,15 @@ A full-stack e-commerce application built with modern technologies, featuring a 
 - **Backend API**: Available with Swagger documentation at `/api-docs`
 - **Video Demo**: https://share.vidyard.com/watch/iMDsLGcUjiVj9JWJ5yr91M
 
+-- **admin email**: admin@gmail.com
+
+-- **admin password**: Mamush12345678
+
+-- **super admin email**: super@mgmail.com
+
+-- **super admin password**: Mamush12345678
+
+
 ## 📋 Project Overview
 
 This project consists of two main parts:
