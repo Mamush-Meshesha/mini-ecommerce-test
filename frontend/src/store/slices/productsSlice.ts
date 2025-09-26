@@ -166,7 +166,7 @@ const productsSlice = createSlice({
       state.error = action.payload;
     },
     // Delete Category actions
-    deleteCategoryRequest: (state, ) => {
+    deleteCategoryRequest: (state, _action: PayloadAction<string>) => {
       state.isLoading = true;
       state.error = null;
     },
