@@ -189,11 +189,28 @@ export const swaggerResponses = {
                 $ref: '#/components/schemas/User',
               },
             },
-            meta: {
+            pagination: {
               $ref: '#/components/schemas/PaginationMeta',
             },
           },
-          required: ['message', 'users'],
+          required: ['users'],
+        },
+        example: {
+          users: [
+            {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              name: 'John Doe',
+              email: 'john@example.com',
+              role: 'USER',
+              createdAt: '2024-01-15T10:30:00Z',
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 10,
+            total: 1,
+            pages: 1,
+          },
         },
       },
     },
@@ -216,6 +233,20 @@ export const swaggerResponses = {
           },
           required: ['message', 'product'],
         },
+        example: {
+          message: 'Product created successfully',
+          product: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'Wireless Headphones',
+            description: 'High-quality wireless headphones with noise cancellation',
+            price: 199.99,
+            stock: 50,
+            categoryId: '456e7890-e89b-12d3-a456-426614174000',
+            image: 'https://example.com/headphones.jpg',
+            createdAt: '2024-01-15T10:30:00Z',
+            updatedAt: '2024-01-15T10:30:00Z',
+          },
+        },
       },
     },
   },
@@ -227,20 +258,41 @@ export const swaggerResponses = {
         schema: {
           type: 'object',
           properties: {
-            message: {
-              type: 'string',
-            },
             products: {
               type: 'array',
               items: {
                 $ref: '#/components/schemas/Product',
               },
             },
-            meta: {
+            pagination: {
               $ref: '#/components/schemas/PaginationMeta',
             },
           },
-          required: ['message', 'products'],
+          required: ['products'],
+        },
+        example: {
+          products: [
+            {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              name: 'Wireless Headphones',
+              description: 'High-quality wireless headphones',
+              price: 199.99,
+              stock: 50,
+              categoryId: '456e7890-e89b-12d3-a456-426614174000',
+              category: {
+                id: '456e7890-e89b-12d3-a456-426614174000',
+                name: 'Electronics',
+              },
+              image: 'https://example.com/headphones.jpg',
+              createdAt: '2024-01-15T10:30:00Z',
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 10,
+            total: 1,
+            pages: 1,
+          },
         },
       },
     },
@@ -285,20 +337,25 @@ export const swaggerResponses = {
         schema: {
           type: 'object',
           properties: {
-            message: {
-              type: 'string',
-            },
             categories: {
               type: 'array',
               items: {
                 $ref: '#/components/schemas/Category',
               },
             },
-            meta: {
-              $ref: '#/components/schemas/PaginationMeta',
-            },
           },
-          required: ['message', 'categories'],
+          required: ['categories'],
+        },
+        example: {
+          categories: [
+            {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              name: 'Electronics',
+              description: 'Electronic devices and accessories',
+              createdAt: '2024-01-15T10:30:00Z',
+              updatedAt: '2024-01-15T10:30:00Z',
+            },
+          ],
         },
       },
     },
@@ -321,6 +378,31 @@ export const swaggerResponses = {
           },
           required: ['message', 'order'],
         },
+        example: {
+          message: 'Order created successfully',
+          order: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            userId: '456e7890-e89b-12d3-a456-426614174000',
+            total: 299.99,
+            status: 'PENDING',
+            shippingAddress: {
+              street: '123 Main St',
+              city: 'New York',
+              state: 'NY',
+              zipCode: '10001',
+              country: 'USA',
+            },
+            orderItems: [
+              {
+                id: '789e0123-e89b-12d3-a456-426614174000',
+                productId: '321e4567-e89b-12d3-a456-426614174000',
+                quantity: 1,
+                price: 299.99,
+              },
+            ],
+            createdAt: '2024-01-15T10:30:00Z',
+          },
+        },
       },
     },
   },
@@ -332,20 +414,51 @@ export const swaggerResponses = {
         schema: {
           type: 'object',
           properties: {
-            message: {
-              type: 'string',
-            },
             orders: {
               type: 'array',
               items: {
                 $ref: '#/components/schemas/Order',
               },
             },
-            meta: {
+            pagination: {
               $ref: '#/components/schemas/PaginationMeta',
             },
           },
-          required: ['message', 'orders'],
+          required: ['orders'],
+        },
+        example: {
+          orders: [
+            {
+              id: '123e4567-e89b-12d3-a456-426614174000',
+              userId: '456e7890-e89b-12d3-a456-426614174000',
+              total: 299.99,
+              status: 'PENDING',
+              user: {
+                id: '456e7890-e89b-12d3-a456-426614174000',
+                name: 'John Doe',
+                email: 'john@example.com',
+              },
+              orderItems: [
+                {
+                  id: '789e0123-e89b-12d3-a456-426614174000',
+                  productId: '321e4567-e89b-12d3-a456-426614174000',
+                  quantity: 1,
+                  price: 299.99,
+                  product: {
+                    id: '321e4567-e89b-12d3-a456-426614174000',
+                    name: 'Wireless Headphones',
+                  },
+                },
+              ],
+              createdAt: '2024-01-15T10:30:00Z',
+            },
+          ],
+          pagination: {
+            page: 1,
+            limit: 10,
+            total: 1,
+            pages: 1,
+          },
         },
       },
     },
@@ -370,6 +483,20 @@ export const swaggerResponses = {
             },
           },
           required: ['message', 'payment', 'transactionId'],
+        },
+        example: {
+          message: 'Payment processed successfully',
+          payment: {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            orderId: '456e7890-e89b-12d3-a456-426614174000',
+            amount: 299.99,
+            currency: 'ETB',
+            status: 'COMPLETED',
+            paymentMethod: 'CHAPA',
+            transactionId: 'tx_1234567890',
+            createdAt: '2024-01-15T10:30:00Z',
+          },
+          transactionId: 'tx_1234567890',
         },
       },
     },

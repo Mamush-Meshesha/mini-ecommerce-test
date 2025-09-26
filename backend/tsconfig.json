@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "src",          // Your source folder
+    "outDir": "dist",          // Compiled JS output
+
+    // Environment Settings
+    "module": "nodenext",      // Node.js ES modules
+    "target": "ES2020",        // JS version output
+    "lib": ["ES2020"],          // Node environment
+    "types": ["node"],          // Include Node types
+
+    // Source Maps & Declarations
+    "sourceMap": true,          // Generate .map files
+    "declaration": true,        // Generate .d.ts files
+    "declarationMap": true,     // Map for declarations
+
+    // Stricter Typechecking Options
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Module & Import Handling
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+
+    // Skip checking 3rd party libs
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],       // Include all TS files in src
+  "exclude": ["node_modules"]    // Exclude dependencies
+}
